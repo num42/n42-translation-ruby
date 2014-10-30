@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require 'n42translation/cli'
+N42translation::CLI.start

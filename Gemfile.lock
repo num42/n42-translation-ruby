@@ -1,0 +1,19 @@
+PATH
+  remote: .
+  specs:
+    n42translation (0.0.1)
+      builder
+      thor
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    builder (3.2.2)
+    thor (0.19.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (>= 1.0.0)
+  n42translation!
