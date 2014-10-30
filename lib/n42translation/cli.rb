@@ -10,7 +10,7 @@ module N42translation
     def xml(file_prefix, outputfile_path)
       get_languages(file_prefix).each do |lang|
         yaml = load_yaml([file_prefix, lang], :xml)
-        fileContent = N42translation::XML.createXML(join_hash_keys(yaml)).target!
+        fileContent = N42translation::XML.createXML(join_hash_keys(yaml, "_")).target!
         save_with_filename(fileContent, lang, file_prefix, outputfile_path, :xml)
       end
     end
@@ -19,7 +19,7 @@ module N42translation
     def strings(file_prefix, outputfile_path)
       get_languages(file_prefix).each do |lang|
         yaml = load_yaml([file_prefix, lang], :strings)
-        fileContent = N42translation::Strings.createStrings(join_hash_keys(yaml)).join("\n")
+        fileContent = N42translation::Strings.createStrings(join_hash_keys(yaml, ".")).join("\n")
         save_with_filename(fileContent, lang, file_prefix, outputfile_path, :strings)
       end
     end
@@ -53,7 +53,7 @@ module N42translation
 
       case method
       when :xml
-        filename = "#{outputfile_path}/values-#{lang}/strings.xml"
+        filename = "#{outputfile_path}/values-#{lang}/strings-generated.xml"
       when :strings
         filename = "#{outputfile_path}/#{lang}.lproj/Localizable.strings"
       when :yml
@@ -72,8 +72,8 @@ module N42translation
     end
 
     # flatten and jon the hash keys, [["a", "b"]=>"c"] becomes ["a.b"=>"c"]
-    def join_hash_keys(hash)
-      Hash[flat_hash(hash).map {|k, v| [k.join("."), v] }]
+    def join_hash_keys(hash, joiner)
+      Hash[flat_hash(hash).map {|k, v| [k.join(joiner), v] }]
     end
 
     # returns the language part of filenames following <file_prefix>.<lang>.yml
