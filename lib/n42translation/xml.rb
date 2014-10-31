@@ -14,7 +14,7 @@ module N42translation
       xml.instruct! :xml, :encoding => "utf-8"
       xml.resources do |r|
         yaml.each do |name, value|
-          r.string(value ,:name => name)
+          r.string("\"#{value}\"" ,:name => name)
         end
       end
       return xml

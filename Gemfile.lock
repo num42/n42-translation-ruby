@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    n42translation (0.0.1)
+    n42translation (0.0.3)
       activesupport
       builder
       thor

@@ -10,7 +10,7 @@ module N42translation
     def xml(file_prefix, outputfile_path)
       get_languages(file_prefix).each do |lang|
         yaml = load_yaml([file_prefix, lang], :xml)
-        fileContent = N42translation::XML.createXML(join_hash_keys(yaml, "_")).target!.gsub("'", "&apos;")
+        fileContent = N42translation::XML.createXML(join_hash_keys(yaml, "_")).target!
         save_with_filename(fileContent, lang, file_prefix, outputfile_path, :xml)
       end
     end
