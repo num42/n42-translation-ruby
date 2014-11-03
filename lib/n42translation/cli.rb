@@ -63,8 +63,8 @@ module N42translation
         end
         yaml = yaml.deep_merge(hash)
         puts yaml.inspect
-        # fileContent = yaml.to_yaml
-        # save_with_filename(fileContent, lang, file_prefix, outputfile_path, :yml)
+        fileContent = yaml.to_yaml
+        save_with_target(fileContent, lang, file_prefix, target)
       end
     end
 
@@ -103,7 +103,19 @@ module N42translation
         filename = "#{outputfile_path}/#{file_prefix}.#{lang}.yml"
       end
       puts "saving to #{filename}"
+      
       FileUtils.mkdir_p(File.dirname(filename))
+      
+      File.open(filename, 'w') { |file| file.write(content) }
+    end
+
+    def save_with_target(content, lang, file_prefix, target)
+      filename = "#{file_prefix}.#{target}.#{lang}.yml"
+
+      puts "saving to #{filename}"
+      
+      FileUtils.mkdir_p(File.dirname(filename))
+      
       File.open(filename, 'w') { |file| file.write(content) }
     end
 
