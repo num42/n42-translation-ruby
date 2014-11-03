@@ -1,0 +1,11 @@
+---
+storage_access:
+  title: Kein externes Speichermedium
+  warning: Die Inhalte können nicht geladen werden, da Ihr Gerät kein externes Speichermedum
+    (SD-Karte oder eingebauten Speicher) besitzt.
+  b:
+    c:
+      d: blubb blubb
+download_manager:
+  default_error: Beim Download ist ein Fehler aufgetreten. Bitte versuchen Sie es
+    später noch einmal.
