@@ -1,0 +1,6 @@
+storage_access:
+  title: "TODO: No external Storage"
+  warning: "TODO: Can't download contents, as your device does not have an external storage meidum (SD-Card or built-in storage)."
+
+download_manager:
+  default_error: "TODO: Download error occured. Please try again later."

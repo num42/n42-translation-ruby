@@ -1,0 +1,126 @@
+application:
+  navigation:
+    back: "Back"
+appointment:
+  action:
+    send:
+      long: "Make a request for a demonstration"
+      short: "Request"
+  error:
+    email: "Please fill in a correct e-mail address"
+    firstname: "Please fill in your first name"
+    lastname: "Please fill in your last name"
+    phone: "Please provide a phone number"
+    privacy: "You have to accept the privacy agreement"
+  form:
+    desiredmonth: "Month"
+    desiredyear: "Year"
+    email: "E-mail"
+    firstname: "First name"
+    lastname: "Last name"
+    phone: "Phone"
+    privacy: "privacy agreement"
+    privacyagreement: "I have read and accepted the privacy agreement"
+    required: "required"
+  section:
+    adress: "Contact information"
+    desiredschedule: "Preferred date"
+    privacy: "Privacy"
+  success:
+    sent: "Your request for a demonstration has been sent."
+detail:
+  action:
+    cancel: "Cancel"
+    done: "Done"
+    download: "Download Brochure"
+    ok: "Ok"
+    share_product_generic: "Share Product"
+    share_product_fb: "Share Product via Facebook"
+    share_product_tw: "Share Product via Twitter"
+download:
+  manager:
+    downloading: "Downloading …"
+    needspace: "You need more free space to download the content."
+    preparing: "Preparing …"
+home:
+  action:
+    appointment: "Make an appointment for a demonstration"
+    delete: "Delete"
+    order: "Brochure order"
+    share_app_fb: "Share App via Facebook"
+    share_app_tw: "Share App via Twitter"
+    update:
+      error: "You are offline"
+      message: "New content is available"
+      title: "Download"
+  delete:
+    information: "Delete downloaded content"
+    warning:
+      text: "Do you really want to delete all downloaded content?"
+      title: "Delete content"
+  more:
+    information:
+      title: "You are looking for further information?"
+      description: "Please order brochures or make an arrangement for a machine demonstration"
+order:
+  action:
+    send:
+      long: "Send me the selected brochures for free"
+      short: "Send"
+  delivery:
+    email: "by E-mail"
+    mail: "by mail"
+  error:
+    city: "Please provide a city"
+    country: "Please select a country"
+    deliveryemail: "You have chosen E-mail delivery, but you have not accepted the privacy agreement for this type of delivery"
+    deliverymail: "You have chosen mail delivery, but you have not accepted the privacy agreement for this type of delivery."
+    email: "Please fill in a correct e-mail address"
+    firstname: "Please fill in your first name"
+    lastname: "Please fill in your last name"
+    nobrochure: "You have to select at least one brochure"
+    nodelivery: "You have to select at least one type of delivery"
+    postalcode: "Please provide a postal code"
+    privacy: "You have to accept the privacy agreement"
+    street: "Please provide a street"
+  form:
+    city: "City"
+    country: "Country"
+    email: "E-mail"
+    firstname: "First name"
+    lastname: "Last name"
+    postalcode: "Postal Code"
+    privacy: "Privacy agreement"
+    required: "required"
+    street: "Street"
+  section:
+    adress: "Where you want us to send them?"
+    brochures: "Select the brochures you want"
+    delivery: "How do you want them delivered?"
+    privacy: "I have read and accepted the privacy agreement for delivery"
+  success:
+    sent: "Your brochure order has been sent"
+settings:
+  about: "About"
+  active_products:
+    title: "Active Products"
+    none: "None"
+    reset: "Reset"
+  content_settings: "Content Settings"
+  delete_content: "Delete Content from Device"
+  download_videos: "Download Videos"
+  event_mode_enabled: "Event Mode Enabled"
+  event_mode_settings: "Event Mode Settings"
+  imprint: "Imprint"
+  offline_news_requires_content_update: "Enabling Offline News requires content update"
+  offline_news: "Offline News"
+  preferred_languages: "Preferred Languages"
+  privacy: "Privacy Agreement"
+  requires_content_update: "Changing this requires a content update"
+  requires_downloading: "Content has to be downloaded again"
+  screensaver_active: "Screensaver active"
+  title: "Settings"
+video:
+  offline:
+    message: "Connect the device to the internet to view videos"
+    title: "Video not available offline"
