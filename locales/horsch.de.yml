@@ -1,127 +1,136 @@
+---
 application:
   navigation:
-    back: "Zurück"
+    back: Zurück
 appointment:
   action:
     send:
-      long: "Stellen Sie eine Vorführanfrage"
-      short: "Anfrage"
+      long: Stellen Sie eine Vorführanfrage
+      short: Anfrage
   error:
-    email: "Bitte geben Sie eine korrekte E-Mail-Adresse an"
-    firstname: "Bitte geben Sie Ihren Vornamen an."
-    lastname: "Bitte geben Sie Ihren Nachnamen an"
-    phone: "Bitte geben Sie eine Telefonnummer an"
-    privacy: "Sie müssen den Datenschutzbestimmungen zustimmen"
+    email: Bitte geben Sie eine korrekte E-Mail-Adresse an
+    firstname: Bitte geben Sie Ihren Vornamen an.
+    lastname: Bitte geben Sie Ihren Nachnamen an
+    phone: Bitte geben Sie eine Telefonnummer an
+    privacy: Sie müssen den Datenschutzbestimmungen zustimmen
   form:
-    desiredmonth: "Monat"
-    desiredyear: "Jahr"
-    email: "E-Mail"
-    firstname: 	"Vorname"
-    lastname: "Nachname"
-    phone: "Telefon"
-    privacy: "Datenschutzbestimmung"
-    privacyagreement: "Ich habe die Datenschutzbestimmungen gelesen und stimme diesen zu."
-    required: "benötigt"
+    desiredmonth: Monat
+    desiredyear: Jahr
+    email: E-Mail
+    firstname: Vorname
+    lastname: Nachname
+    phone: Telefon
+    privacy: Datenschutzbestimmung
+    privacyagreement: Ich habe die Datenschutzbestimmungen gelesen und stimme diesen
+      zu.
+    required: benötigt
   section:
-    adress: "Kontaktinformationen"
-    desiredschedule: "Bevorzugtes Datum"
-    privacy: "Datenschutzbestimmungen"
+    adress: Kontaktinformationen
+    desiredschedule: Bevorzugtes Datum
+    privacy: Datenschutzbestimmungen
   success:
-    sent: "Ihre Vorführanfrage wurde uns zugesandt."
+    sent: Ihre Vorführanfrage wurde uns zugesandt.
 detail:
   action:
-    cancel: "Abbrechen"
-    done: "Fertig"
-    download: "Prospekt herunterladen"
-    ok: "Ok"
-    share_product_generic: "Produkt teilen"
-    share_product_fb: "Produkt über Facebook teilen"
-    share_product_tw: "Produkt über Twitter teilen"
+    cancel: Abbrechen
+    done: Fertig
+    download: Prospekt herunterladen
+    ok: Ok
+    share_product_generic: Produkt teilen
+    share_product_fb: Produkt über Facebook teilen
+    share_product_tw: Produkt über Twitter teilen
 download:
   manager:
-    downloading: "Herunterladen …"
-    needspace: "Sie benötigen mehr freien Speicher um die Inhalte herunterzuladen."
-    preparing: "Vorbereiten …"
+    downloading: Herunterladen …
+    needspace: Sie benötigen mehr freien Speicher um die Inhalte herunterzuladen.
+    preparing: Vorbereiten …
 home:
   action:
-    appointment: "Vorführung vereinbaren"
-    delete: "Löschen"
-    order: "Prospektbestellung"
-    share_app_generic: "App teilen"
-    share_app_fb: "App über Facebook teilen"
-    share_app_tw: "App über Twitter teilen"
+    appointment: Vorführung vereinbaren
+    delete: Löschen
+    order: Prospektbestellung
+    share_app_generic: App teilen
+    share_app_fb: App über Facebook teilen
+    share_app_tw: App über Twitter teilen
     update:
-      error: "Sie sind nicht mit dem Internet verbunden"
-      message: "Es sind neue Inhalte verfügbar"
-      title: "Download"
+      error: Sie sind nicht mit dem Internet verbunden
+      message: Es sind neue Inhalte verfügbar
+      title: Download
   delete:
-    information: "Heruntergeladene Inhalte löschen"
+    information: Heruntergeladene Inhalte löschen
     warning:
-      text: "Wollen Sie wirklich alle heruntergeladenen Inhalte löschen?"
-      title: "Inhalte löschen"
+      text: Wollen Sie wirklich alle heruntergeladenen Inhalte löschen?
+      title: Inhalte löschen
   more:
     information:
-      title: "Sie suchen nach weiteren Informationen?"
-      description: "Bitte bestellen Sie einen Prospekt oder vereinbaren Sie eine Maschinenvorführung."
+      title: Sie suchen nach weiteren Informationen?
+      description: Bitte bestellen Sie einen Prospekt oder vereinbaren Sie eine Maschinenvorführung.
 order:
   action:
     send:
-      long: "Senden Sie mir die Prospekte kostenlos zu"
-      short: "Senden  "
+      long: Senden Sie mir die Prospekte kostenlos zu
+      short: 'Senden  '
   delivery:
-    email: "per E-Mail"
-    mail: "auf dem Postweg"
+    email: per E-Mail
+    mail: auf dem Postweg
   error:
-    city: "Bitte geben Sie Ihren Wohnort an"
-    country: "Bitte wählen Sie ein Land aus"
-    deliveryemail: "Sie haben E-Mail Versand ausgewählt, aber nicht die entsprechenden Datenschutzbestimmungen anerkannt."
-    deliverymail: "Sie haben den Postweg ausgewählt, aber nicht die entsprechenden Datenschutzbestimmungen anerkannt."
-    email: "Bitte geben Sie eine korrekte E-Mail-Adresse an"
-    firstname: "Bitte geben Sie Ihren Vornamen an."
-    lastname: "Bitte geben Sie Ihren Nachnamen an"
-    nobrochure: "Sie müssen mindestens einen Prospekt auswählen"
-    nodelivery: "Bitte geben Sie einen Zustellungsweg an"
-    postalcode: "Bitte geben Sie Ihre PLZ an"
-    privacy: "Sie müssen den Datenschutzbestimmungen zustimmen"
-    street: "Bitte geben Sie Ihre Straße an"
+    city: Bitte geben Sie Ihren Wohnort an
+    country: Bitte wählen Sie ein Land aus
+    deliveryemail: Sie haben E-Mail Versand ausgewählt, aber nicht die entsprechenden
+      Datenschutzbestimmungen anerkannt.
+    deliverymail: Sie haben den Postweg ausgewählt, aber nicht die entsprechenden
+      Datenschutzbestimmungen anerkannt.
+    email: Bitte geben Sie eine korrekte E-Mail-Adresse an
+    firstname: Bitte geben Sie Ihren Vornamen an.
+    lastname: Bitte geben Sie Ihren Nachnamen an
+    nobrochure: Sie müssen mindestens einen Prospekt auswählen
+    nodelivery: Bitte geben Sie einen Zustellungsweg an
+    postalcode: Bitte geben Sie Ihre PLZ an
+    privacy: Sie müssen den Datenschutzbestimmungen zustimmen
+    street: Bitte geben Sie Ihre Straße an
   form:
-    city: "Wohnort"
-    country: "Land"
-    email: "E-Mail"
-    firstname: "Vorname"
-    lastname: "Nachname"
-    postalcode: "PLZ"
-    privacy: "Datenschutzbestimmungen"
-    required: "benötigt"
-    street: "Straße"
+    city: Wohnort
+    country: Land
+    email: E-Mail
+    firstname: Vorname
+    lastname: Nachname
+    postalcode: PLZ
+    privacy: Datenschutzbestimmungen
+    required: benötigt
+    street: Straße
   section:
-    adress: "Wohin sollen wir sie senden?"
-    brochures: "Wählen Sie die gewünschten Prospekte aus"
-    delivery: "Wie möchten Sie sie zugesandt bekommen?"
-    privacy: "Ich habe die Datenschutzbestimmungen bzgl. der Lieferung gelesen und zugestimmt"
+    adress: Wohin sollen wir sie senden?
+    brochures: Wählen Sie die gewünschten Prospekte aus
+    delivery: Wie möchten Sie sie zugesandt bekommen?
+    privacy: Ich habe die Datenschutzbestimmungen bzgl. der Lieferung gelesen und
+      zugestimmt
   success:
-    sent: "Ihre Prospekte werden Ihnen zugesandt"
+    sent: Ihre Prospekte werden Ihnen zugesandt
 settings:
-  about: "Über"
+  about: Über
   active_products:
-    title: "Aktivierte Produkte"
-    none: "keine"
-    reset: "zurücksetzen"
-  content_settings: "Inhaltseinstellungen"
-  delete_content: "Inhalte vom Gerät löschen"
-  download_videos: "Videos herunterladen"
-  event_mode_enabled: "Messemodus aktiv"
-  event_mode_settings: "Einstellungen für Messemodus"
-  imprint: "Impressum"
-  offline_news_requires_content_update: "Die Neuigkeiten offline bereitzuhalten erfordert eine Inhaltsaktualisierung"
-  offline_news: "Neuigkeiten offline bereithalten"
-  preferred_languages: "Bevorzugte Sprachen"
-  privacy: "Datenschutzbestimmungen"
-  requires_content_update: "erfordert Inhaltsaktualisierung"
-  requires_downloading: "Inhalte müssen neu heruntergeladen werden"
-  screensaver_active: "Bildschirmschoner aktiv"
-  title: "Einstellungen"
+    title: Aktivierte Produkte
+    none: keine
+    reset: zurücksetzen
+  content_settings: Inhaltseinstellungen
+  delete_content: Inhalte vom Gerät löschen
+  download_videos: Videos herunterladen
+  event_mode_enabled: Messemodus aktiv
+  event_mode_settings: Einstellungen für Messemodus
+  imprint: Impressum
+  offline_news_requires_content_update: Die Neuigkeiten offline bereitzuhalten erfordert
+    eine Inhaltsaktualisierung
+  offline_news: Neuigkeiten offline bereithalten
+  preferred_languages: Bevorzugte Sprachen
+  privacy: Datenschutzbestimmungen
+  requires_content_update: erfordert Inhaltsaktualisierung
+  requires_downloading: Inhalte müssen neu heruntergeladen werden
+  screensaver_active: Bildschirmschoner aktiv
+  title: Einstellungen
 video:
   offline:
-    message: "Verbinden Sie das Gerät mit dem Internet um Videos anzusehen."
-    title: "Video ist nicht offline verfügbar"
+    message: Verbinden Sie das Gerät mit dem Internet um Videos anzusehen.
+    title: Video ist nicht offline verfügbar
+path:
+  to:
+    my_message: my new message

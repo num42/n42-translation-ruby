@@ -1,6 +1,11 @@
+---
 storage_access:
-  title: "No external Storage"
-  warning: "Can't download contents, as your device does not have an external storage meidum (SD-Card or built-in storage)."
-
+  title: No external Storage
+  warning: Can't download contents, as your device does not have an external storage
+    meidum (SD-Card or built-in storage).
+  b:
+    c:
+      d: blubb blubb2
+  second_warning: Another Warning
 download_manager:
-  default_error: "Download error occured. Please try again later."
+  default_error: Download error occured. Please try again later.

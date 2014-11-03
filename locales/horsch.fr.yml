@@ -1,127 +1,135 @@
+---
 application:
   navigation:
-    back: "Précédent"
+    back: Précédent
 appointment:
   action:
     send:
-      long: "Créez une demande de démonstration."
-      short: "Demande"
+      long: Créez une demande de démonstration.
+      short: Demande
   error:
-    email: "Veuillez entrer votre adresse e-mail."
-    firstname: "Veuillez entrer votre prénom."
-    lastname: "Veuillez entrer votre nom."
-    phone: "Veuillez entrer votre numéro de téléphone."
-    privacy: "Il faut accepter les conventions sur la protection des données."
+    email: Veuillez entrer votre adresse e-mail.
+    firstname: Veuillez entrer votre prénom.
+    lastname: Veuillez entrer votre nom.
+    phone: Veuillez entrer votre numéro de téléphone.
+    privacy: Il faut accepter les conventions sur la protection des données.
   form:
-    desiredmonth: "Mois"
-    desiredyear: "Année"
-    email: "E-Mail"
-    firstname: "Prénom"
-    lastname: "Nom"
-    phone: "Téléphone"
-    privacy: "Convention sur la protection des données"
-    privacyagreement: "Conventions sur la protection des données lues et approuvées."
-    required: "nécessaire"
+    desiredmonth: Mois
+    desiredyear: Année
+    email: E-Mail
+    firstname: Prénom
+    lastname: Nom
+    phone: Téléphone
+    privacy: Convention sur la protection des données
+    privacyagreement: Conventions sur la protection des données lues et approuvées.
+    required: nécessaire
   section:
-    adress: "Informations de contact"
-    desiredschedule: "Date préferée"
-    privacy: "Conventions sur la protection des données"
+    adress: Informations de contact
+    desiredschedule: Date préferée
+    privacy: Conventions sur la protection des données
   success:
-    sent: "Nous avons reçu votre demande de démonstration."
+    sent: Nous avons reçu votre demande de démonstration.
 detail:
   action:
-    cancel: "Annuler"
-    done: "Ok"
-    download: "Télécharger prospectus"
-    ok: "Ok"
-    share_product_generic: "Partager produit"
-    share_product_fb: "Partager produit via Facebook"
-    share_product_tw: "Partager produit via Twitter"
+    cancel: Annuler
+    done: Ok
+    download: Télécharger prospectus
+    ok: Ok
+    share_product_generic: Partager produit
+    share_product_fb: Partager produit via Facebook
+    share_product_tw: Partager produit via Twitter
 download:
   manager:
-    downloading: "Téléchargement en cours…"
-    needspace: "Vous avez besoins de plus d'espace libre pour télécherger le contenu"
-    preparing: "en cours…"
+    downloading: Téléchargement en cours…
+    needspace: Vous avez besoins de plus d'espace libre pour télécherger le contenu
+    preparing: en cours…
 home:
   action:
-    appointment: "Convenir d'une démonstration"
-    delete: "Supprimer"
-    order: "Commande prospectus"
-    share_app_generic: "Partager application"
-    share_app_fb: "Partager application via Facebook"
-    share_app_tw: "Partager application via Twitter"
+    appointment: Convenir d'une démonstration
+    delete: Supprimer
+    order: Commande prospectus
+    share_app_generic: Partager application
+    share_app_fb: Partager application via Facebook
+    share_app_tw: Partager application via Twitter
     update:
-      error: "Vous n'êtes pas connecté à internet"
-      message: "Nouveau contenu est disponible."
-      title: "Téléchargement"
+      error: Vous n'êtes pas connecté à internet
+      message: Nouveau contenu est disponible.
+      title: Téléchargement
   delete:
-    information: "Supprimer contenus téléchargés"
+    information: Supprimer contenus téléchargés
     warning:
-      text: "Voulez-vous vraiment supprimer tous les contenus téléchargés?"
-      title: "Supprimer contenus"
+      text: Voulez-vous vraiment supprimer tous les contenus téléchargés?
+      title: Supprimer contenus
   more:
     information:
-      title: "Vous cherchez d'autres informations?"
-      description: "Veuillez commander un prospectus ou convenir d'une démonstration."
+      title: Vous cherchez d'autres informations?
+      description: Veuillez commander un prospectus ou convenir d'une démonstration.
 order:
   action:
     send:
-      long: "Veuillez m'envoyer les prospectusgratuitement."
-      short: "Envoyer"
+      long: Veuillez m'envoyer les prospectusgratuitement.
+      short: Envoyer
   delivery:
-    email: "par e-mail"
-    mail: "par courrier"
+    email: par e-mail
+    mail: par courrier
   error:
-    city: "Veuillez entrer votre ville."
-    country: "Veuillez choisir un pays."
-    deliveryemail: "Vous avez choisi envoi par e-mail, mais vous n'avez pas accepté les conventions sur la protection des données correspondantes."
-    deliverymail: "Vous avez choisi envoi par courrier, mais vous n'avez pas accepté les conventions sur la protection des données correspondantes."
-    email: "Veuillez entrer votre adresse e-mail."
-    firstname: "Veuillez entrer votre prénom."
-    lastname: "Veuillez entrer votre nom."
-    nobrochure: "Il faut choisir au moins un prospectus."
-    nodelivery: "Veuillez indiquer un mode d'envoi."
-    postalcode: "Veuillez entrer votre code postal."
-    privacy: "Il faut accepter les conventions sur la protection des données."
-    street: "Veuillez entrer votre rue."
+    city: Veuillez entrer votre ville.
+    country: Veuillez choisir un pays.
+    deliveryemail: Vous avez choisi envoi par e-mail, mais vous n'avez pas accepté
+      les conventions sur la protection des données correspondantes.
+    deliverymail: Vous avez choisi envoi par courrier, mais vous n'avez pas accepté
+      les conventions sur la protection des données correspondantes.
+    email: Veuillez entrer votre adresse e-mail.
+    firstname: Veuillez entrer votre prénom.
+    lastname: Veuillez entrer votre nom.
+    nobrochure: Il faut choisir au moins un prospectus.
+    nodelivery: Veuillez indiquer un mode d'envoi.
+    postalcode: Veuillez entrer votre code postal.
+    privacy: Il faut accepter les conventions sur la protection des données.
+    street: Veuillez entrer votre rue.
   form:
-    city: "Ville"
-    country: "Pays"
-    email: "E-Mail"
-    firstname: "Prénom"
-    lastname: "Nom"
-    postalcode: "CP"
-    privacy: "Conventions sur la protection des données"
-    required: "nécessaire"
-    street: "Rue"
+    city: Ville
+    country: Pays
+    email: E-Mail
+    firstname: Prénom
+    lastname: Nom
+    postalcode: CP
+    privacy: Conventions sur la protection des données
+    required: nécessaire
+    street: Rue
   section:
-    adress: "Où est -ce qu'il faut les envoyer?"
-    brochures: "Veuillez choisir les prospectus souhaités."
-    delivery: "Comment est-ce qu'il faut les envoyer?"
-    privacy: "Conventions sur la protection des données concernant la livraison lues et approuvées"
+    adress: Où est -ce qu'il faut les envoyer?
+    brochures: Veuillez choisir les prospectus souhaités.
+    delivery: Comment est-ce qu'il faut les envoyer?
+    privacy: Conventions sur la protection des données concernant la livraison lues
+      et approuvées
   success:
-    sent: "Les prospectus vous seront envoyés."
+    sent: Les prospectus vous seront envoyés.
 settings:
-  about: "A propos"
+  about: A propos
   active_products:
-    title: "Produits activés"
-    none: "aucun"
-    reset: "Restaurer"
-  content_settings: "Paramètre du contenu"
-  delete_content: "supprimer le contenu de l'appareil"
-  download_videos: "télécharger la vidéo"
-  event_mode_enabled: "Made d'affichage actif"
-  event_mode_settings: "Réglage du mode d'affichage"
-  imprint: "mentions légales"
-  offline_news_requires_content_update: "L'activation des news hors connexion nécessite la mise à jour du contenu"
-  offline_news: "conservez les news hors connexion"
-  preferred_languages: "Langue préférée"
-  privacy: "Déclaration de protection des données"
-  requires_content_update: "nécessite une mise à jour du contenu"
-  requires_downloading: "Le contenu doit être téléchargé de nouveau"
-  screensaver_active: "Economiseur d'écran actif"
-  title: "Réglages"
+    title: Produits activés
+    none: aucun
+    reset: Restaurer
+  content_settings: Paramètre du contenu
+  delete_content: supprimer le contenu de l'appareil
+  download_videos: télécharger la vidéo
+  event_mode_enabled: Made d'affichage actif
+  event_mode_settings: Réglage du mode d'affichage
+  imprint: mentions légales
+  offline_news_requires_content_update: L'activation des news hors connexion nécessite
+    la mise à jour du contenu
+  offline_news: conservez les news hors connexion
+  preferred_languages: Langue préférée
+  privacy: Déclaration de protection des données
+  requires_content_update: nécessite une mise à jour du contenu
+  requires_downloading: Le contenu doit être téléchargé de nouveau
+  screensaver_active: Economiseur d'écran actif
+  title: Réglages
 video:
   offline:
-    message: "Connectez-vous à internet pour visualiser la vidéo"
-    title: "La vidéo n'est pas disponible hors connexion"
+    message: Connectez-vous à internet pour visualiser la vidéo
+    title: La vidéo n'est pas disponible hors connexion
+path:
+  to:
+    my_message: my new message

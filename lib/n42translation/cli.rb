@@ -7,38 +7,38 @@ require 'n42translation/strings'
 module N42translation
   class CLI < Thor
     
-    desc "build <target> <file_prefix> <outputfile_path>", "TODO"
+    desc "build <target> <file_prefix> <outputfile_path>", "builds the files for the target (all, ios, android, rails) for the file_prefix (e.g. horsch) to the outputfile_path (if given, they are taken from the config file otherwise)"
     def build(target, file_prefix, outputfile_path=nil)
-      unless outputfile_path.nil?
+      if outputfile_path.nil?
         # there is no output path, use from config file
         config = load_config_file
         if config.nil?
-          raise "No config file found, add config file or give explicit path"
+          raise  Thor::Error, "No config file found, add config file or give explicit path"
         else
           puts "using paths from configfile"
-          case target
+          case target.to_sym
           when :all
-            build(:android, file_prefix, config[:android])
-            build(:ios, file_prefix, config[:ios])
-            build(:rails, file_prefix, config[:rails])
+            build_xml(file_prefix, config["default_path"]["android"])
+            build_strings(file_prefix, config["default_path"]["ios"])
+            build_yml(file_prefix, config["default_path"]["rails"])
           when :android
-            build(:android, file_prefix, config[:android])
+            build_xml(file_prefix, config["default_path"]["android"])
           when :ios
-            build(:ios, file_prefix, config[:ios])
+            build_strings(file_prefix, config["default_path"]["ios"])
           when :rails
-            build(:rails, file_prefix, config[:rails])
+            build_yml(file_prefix, config["default_path"]["rails"])
           else
-            raise "unknown target"
+            raise Thor::Error, "unknown target: #{target}"
           end
         end
       else
-         unless get_languages.empty?
-          raise "No files found for file_prefix"
+         if get_languages(file_prefix).empty?
+          raise  Thor::Error, "No files found for file_prefix: #{file_prefix}"
         end
 
-        case target
+        case target.to_sym
         when :all
-          raise "outputfile_path cannot be used, when target all is defined"
+          raise Thor::Error, "outputfile_path cannot be used, when target all is defined. Use a config file or call another target"
         when :android
           build_xml(file_prefix, outputfile_path)
         when :ios
@@ -46,15 +46,20 @@ module N42translation
         when :rails
           build_yml(file_prefix, outputfile_path)
         else
-          raise "unknown target"
+          raise  Thor::Error, "unknown target: #{target}"
         end
       end
     end  
 
-    desc "add <target> <file_prefix> <key> <value>", "TODO"
+    desc "add <target> <file_prefix> <key> <value>", "Adds the value (e.g. 'my message') to the key (e.g. path.to.my_message) in the target (all, ios, android or rails) for the file_prefix (e.g. horsch)"
     def add(target, file_prefix, key, value)
       get_languages(file_prefix).each do |lang|
-        yaml = load_yaml([file_prefix, lang, target])
+        yaml = ""
+        if (target.eql? "all")
+          yaml = load_yaml([file_prefix, lang])
+        else
+          yaml = load_yaml([file_prefix, lang, target])
+        end
         # hash is a string here
         hash = value
         key.split(".").reverse.each do |keypart|
@@ -110,7 +115,12 @@ module N42translation
     end
 
     def save_with_target(content, lang, file_prefix, target)
-      filename = "#{file_prefix}.#{target}.#{lang}.yml"
+      puts ("#{target}")
+      if target.eql? "all"
+        filename = "#{file_prefix}.#{lang}.yml"
+      else
+        filename = "#{file_prefix}.#{lang}.#{target}.yml"
+      end
 
       puts "saving to #{filename}"
       
@@ -145,6 +155,7 @@ module N42translation
       end
       return yaml
     end
+
     ## Builder
 
     def build_xml(file_prefix, outputfile_path)
@@ -173,8 +184,7 @@ module N42translation
 
     
     ## Hash Helper
-
-    
+ 
     # flatten the hash, ["a" => ["b" => "c"]] becomes [["a", "b"]=>"c"]
     def flat_hash(h,f=[],g={})
       return g.update({ f=>h }) unless h.is_a? Hash
@@ -187,7 +197,5 @@ module N42translation
       Hash[flat_hash(hash).map {|k, v| [k.join(joiner), v] }]
     end
 
-
-   
   end  
 end
