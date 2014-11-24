@@ -66,7 +66,14 @@ module N42translation
           # hash is a hash after calling this the first time
           hash = {keypart => hash}
         end
-        yaml = yaml.deep_merge(hash)
+        
+        unless yaml
+          # Yaml returned false, so it was empty and we set it to hash
+          yaml = hash
+        else
+          yaml = yaml.deep_merge(hash)
+        end
+
         puts yaml.inspect
         fileContent = yaml.to_yaml
         save_with_target(fileContent, lang, file_prefix, target)
@@ -143,7 +150,12 @@ module N42translation
     end
 
     def load_yaml(filename_parts)
-      return YAML.load_file(Array.new(filename_parts).push("yml").join("."))  
+      filename = Array.new(filename_parts).push("yml").join(".")
+      if File.exist?(filename)
+        return YAML.load_file(filename)
+      else
+        return {}
+      end
     end
 
     def load_merged_yaml_for_method(filename_parts, method)
