@@ -3,62 +3,98 @@ require 'yaml'
 require 'active_support'
 require 'n42translation/xml'
 require 'n42translation/strings'
+require 'n42translation/csv_convert'
+require 'fileutils'
+require 'csv'
 
 module N42translation
   class CLI < Thor
-    
-    desc "build <target> <file_prefix> <outputfile_path>", "builds the files for the target (all, ios, android, rails) for the file_prefix (e.g. horsch) to the outputfile_path (if given, they are taken from the config file otherwise)"
-    def build(target, file_prefix, outputfile_path=nil)
-      if outputfile_path.nil?
-        # there is no output path, use from config file
-        config = load_config_file
-        if config.nil?
-          raise  Thor::Error, "No config file found, add config file or give explicit path"
-        else
-          puts "using paths from configfile"
-          case target.to_sym
-          when :all
-            build_xml(file_prefix, config["default_path"]["android"])
-            build_strings(file_prefix, config["default_path"]["ios"])
-            build_yml(file_prefix, config["default_path"]["rails"])
-          when :android
-            build_xml(file_prefix, config["default_path"]["android"])
-          when :ios
-            build_strings(file_prefix, config["default_path"]["ios"])
-          when :rails
-            build_yml(file_prefix, config["default_path"]["rails"])
-          else
-            raise Thor::Error, "unknown target: #{target}"
-          end
-        end
-      else
-         if get_languages(file_prefix).empty?
-          raise  Thor::Error, "No files found for file_prefix: #{file_prefix}"
-        end
 
-        case target.to_sym
-        when :all
-          raise Thor::Error, "outputfile_path cannot be used, when target all is defined. Use a config file or call another target"
-        when :android
-          build_xml(file_prefix, outputfile_path)
-        when :ios
-          build_strings(file_prefix, outputfile_path)
-        when :rails
-          build_yml(file_prefix, outputfile_path)
-        else
-          raise  Thor::Error, "unknown target: #{target}"
+    desc "init <project-name> <target> <languages>", "init"
+    def init(project_name = nil, target = nil, languages = nil)
+      config = load_config_file(project_name)
+      build_path = config["build_path"]
+      source_path = config["source_path"]
+
+      project_name = config["project_name"]
+      project_name = project_name unless project_name.nil?
+
+      targets = [target] if target != nil && target != ""
+      targets = config["targets"]["all"].split(',').map(&:lstrip).map(&:rstrip) if target === "all"
+      targets = config["targets"]["mobile"].split(',').map(&:lstrip).map(&:rstrip) if target === "mobile"
+      targets << "" # we want a platform named "all", to build from 'platform' + 'all' files
+
+      raise Thor::Error, "no build path found" if build_path.nil?
+      raise Thor::Error, "no locale path found" if source_path.nil?
+      raise Thor::Error, "no project name was specified" if project_name.nil?
+      raise Thor::Error, "no targets specified" if targets.nil?
+
+      languages = config["languages"] if languages.nil?
+      langs = languages.split(',').map(&:lstrip).map(&:rstrip)
+      langs = (langs + get_languages(project_name)).uniq
+
+      targets.each do |_target|
+        build(_target, project_name, build_path) unless _target == "all"
+
+        langs.each do |lang|
+          filename = File.join(source_path, "#{project_name}.#{lang}.yml") if _target ===""
+          filename = File.join(source_path, "#{project_name}.#{lang}.#{_target}.yml") unless _target === ""
+          File.open(filename, 'w') { |file| file.write("---") } unless File.exists?(filename)
         end
       end
-    end  
+    end
 
-    desc "add <target> <file_prefix> <key> <value>", "Adds the value (e.g. 'my message') to the key (e.g. path.to.my_message) in the target (all, ios, android or rails) for the file_prefix (e.g. horsch)"
-    def add(target, file_prefix, key, value)
-      get_languages(file_prefix).each do |lang|
-        yaml = ""
+    desc "build <target> <project_name> <outputfile_path> <default-language>", "builds the files for the target (all, ios, android, rails) for the project_name (e.g. horsch) to the outputfile_path (if given, they are taken from the config file otherwise)"
+    def build(target, project_name, outputfile_path=nil, default_language="en")
+      config = load_config_file(project_name)
+
+      outputfile_path = config["build_path"] if outputfile_path.nil?
+      raise Thor::Error, "no output path specified" if outputfile_path.nil?
+
+      source_path = config["source_path"]
+      raise Thor::Error, "no source path specified" if source_path.nil?
+
+      path_name = config["target_build_path_names"][target.to_s].to_s
+      target_build_path = File.join(outputfile_path, path_name)
+
+      case target.to_sym
+      when :all
+        self.build(:android, project_name, outputfile_path)
+        self.build(:ios, project_name, outputfile_path)
+        self.build(:rails, project_name, outputfile_path)
+        self.build(:csv, project_name, outputfile_path)
+      when :android
+        raise Thor::Error, "no build path specified for your target: #{target}" if target_build_path.nil?
+        build_platform(source_path, project_name, target_build_path, target, :xml)
+      when :ios
+        raise Thor::Error, "no build path specified for your target: #{target}" if target_build_path.nil?
+        build_platform(source_path, project_name, target_build_path, target, :strings)
+      when :rails
+        raise Thor::Error, "no build path specified for your target: #{target}" if target_build_path.nil?
+        build_platform(source_path, project_name, target_build_path, target, :yml)
+      when :csv
+        raise Thor::Error, "no build path specified for your target: #{target}" if target_build_path.nil?
+        build_csv(source_path, project_name, target_build_path, [:all, :ios, :android, :rails], default_language)
+        # build_platform(source_path, project_name, target_build_path, target, :csv)
+      when "".to_sym
+        # ignore the “” case
+      else
+        raise Thor::Error, "unknown target: #{target}"
+      end
+    end
+
+    desc "add <target> <project_name> <key> <value>", "Adds the value (e.g. 'my message') to the key (e.g. path.to.my_message) in the target (all, ios, android or rails) for the project_name (e.g. horsch)"
+    def add(target, project_name, key, value)
+      config = load_config_file(project_name)
+      source_path = config["source_path"]
+
+      get_languages(project_name).each do |lang|
+        yaml = yaml_for_platform_and_lang(source_path, project_name, target.to_sym, lang)
+
         if (target.eql? "all")
-          yaml = load_yaml([file_prefix, lang])
+          yaml = load_yaml([project_name, lang])
         else
-          yaml = load_yaml([file_prefix, lang, target])
+          yaml = load_yaml([project_name, lang, target])
         end
         # hash is a string here
         hash = value
@@ -66,7 +102,7 @@ module N42translation
           # hash is a hash after calling this the first time
           hash = {keypart => hash}
         end
-        
+
         unless yaml
           # Yaml returned false, so it was empty and we set it to hash
           yaml = hash
@@ -76,35 +112,35 @@ module N42translation
 
         puts yaml.inspect
         fileContent = yaml.to_yaml
-        save_with_target(fileContent, lang, file_prefix, target)
+        save_with_target(fileContent, lang, project_name, target)
       end
     end
 
     private
     ## Helper
 
-    def load_config_file
-      config_path = "n42translation-config.yml"
-      if File.exist?(config_path)
-        return YAML.load_file(config_path)
-      else
-        return nil
-      end
+    def load_config_file(project_name = "default")
+      default_path = "./config.default.yml"
+      project_path = "./config.#{project_name}.yml"
+      default_yaml = load_yaml(default_path)
+      project_yaml = load_yaml(project_path)
+
+      return default_yaml if project_yaml.nil? || project_yaml == false
+      default_yaml.deep_merge(project_yaml)
     end
 
-    # returns the language part of filenames as array following <file_prefix>.<lang>.yml
-    def get_languages(file_prefix)
-      yml_files = Dir.glob("#{file_prefix}.*.yml")
-      # remove basename
-      yml_files.map!{|f| f.slice(file_prefix.length+1, f.length)}
-      # get first part until .
-      yml_files.map!{|f| f.split(".")[0]}
-      # remove duplicates
-      yml_files.uniq!
-      return yml_files
+    # returns the language part of filenames as array following <project_name>.<lang>.yml
+    def get_languages(project_name)
+      config = load_config_file(project_name)
+
+      source_path = config["source_path"]
+      raise Thor::Error, "no locale path found" if source_path.nil?
+
+      langs = Dir.glob("#{source_path}/#{project_name}.*.yml").map{|f| File.basename(f,".yml").split(".")[1]}
+      langs.uniq
     end
 
-    def save_with_filename(content, lang, file_prefix, outputfile_path, method)
+    def save_with_filename(content, lang, project_name, outputfile_path, method)
       filename = ""
       case method
       when :xml
@@ -112,91 +148,81 @@ module N42translation
       when :strings
         filename = "#{outputfile_path}/#{lang}.lproj/Localizable.strings"
       when :yml
-        filename = "#{outputfile_path}/#{file_prefix}.#{lang}.yml"
+        filename = "#{outputfile_path}/#{project_name}.#{lang}.yml"
       end
       puts "saving to #{filename}"
-      
+
       FileUtils.mkdir_p(File.dirname(filename))
-      
+
       File.open(filename, 'w') { |file| file.write(content) }
     end
 
-    def save_with_target(content, lang, file_prefix, target)
+    def save_with_target(content, lang, project_name, target)
       puts ("#{target}")
       if target.eql? "all"
-        filename = "#{file_prefix}.#{lang}.yml"
+        filename = "#{project_name}.#{lang}.yml"
       else
-        filename = "#{file_prefix}.#{lang}.#{target}.yml"
+        filename = "#{project_name}.#{lang}.#{target}.yml"
       end
 
       puts "saving to #{filename}"
-      
+
       FileUtils.mkdir_p(File.dirname(filename))
-      
       File.open(filename, 'w') { |file| file.write(content) }
     end
 
-    def get_filepart_for_method(method)
-      case method
-      when :xml
-        return "android"
-      when :strings
-        return "ios"
-      when :yml
-        return "rails"
-      else
-        raise "unknown method"
-      end
-    end
-
-    def load_yaml(filename_parts)
-      filename = Array.new(filename_parts).push("yml").join(".")
-      if File.exist?(filename)
-        return YAML.load_file(filename)
+    def load_yaml(file_path)
+      if File.exist?(file_path)
+        YAML.load_file(file_path) || {}
       else
         return {}
       end
     end
 
-    def load_merged_yaml_for_method(filename_parts, method)
-      yaml = load_yaml(filename_parts)
-      additional_file = Array.new(filename_parts).push(get_filepart_for_method(method)).push("yml").join(".")
-      if File.exist?(additional_file)
-        additional_yaml = YAML.load_file(additional_file)
-        yaml = yaml.deep_merge(additional_yaml)
-      end
-      return yaml
+    def load_merged_yaml_for_platform(source_path, project_name, language, platform)
+      yaml = load_yaml(File.join(source_path,"#{project_name}.#{language}.yml"))
+      target_yaml = load_yaml(File.join(source_path,"#{project_name}.#{language}.#{platform.to_s}.yml"))
+      return yaml.deep_merge(target_yaml) if !target_yaml.nil? || target_yaml === false
+      yaml
     end
 
     ## Builder
-
-    def build_xml(file_prefix, outputfile_path)
-      get_languages(file_prefix).each do |lang|
-        yaml = load_merged_yaml_for_method([file_prefix, lang], :xml)
-        fileContent = N42translation::XML.createXML(join_hash_keys(yaml, "_")).target!
-        save_with_filename(fileContent, lang, file_prefix, outputfile_path, :xml)
+    def build_platform(source_path, project_name, outputfile_path, platform, method)
+      get_languages(project_name).each do |lang|
+        yaml = load_merged_yaml_for_platform(source_path, project_name, lang, platform)
+        fileContent = ""
+        fileContent = N42translation::XML.createXML(join_hash_keys(yaml, "_")).target! if method == :xml
+        fileContent = N42translation::Strings.createStrings(join_hash_keys(yaml, ".")).join("\n") if method == :strings
+        fileContent = yaml.to_yaml if method == :yml
+        save_with_filename(fileContent, lang, project_name, outputfile_path, method)
       end
     end
 
-    def build_strings(file_prefix, outputfile_path)
-      get_languages(file_prefix).each do |lang|
-        yaml = load_merged_yaml_for_method([file_prefix, lang], :strings)
-        fileContent = N42translation::Strings.createStrings(join_hash_keys(yaml, ".")).join("\n")
-        save_with_filename(fileContent, lang, file_prefix, outputfile_path, :strings)
+    def build_csv(source_path, project_name, outputfile_path, platforms, default_language)
+      languages = get_languages(project_name)
+      language_yamls = {}
+      languages.each do |language|
+        language_yamls["#{language}"] = platforms.map {|platform| yaml_for_platform_and_lang(source_path, project_name, platform, language) }.reduce({}, :merge)
+      end
+
+      csv_data = N42translation::CSVConvert.createCSV(language_yamls.values.map{|yml| join_hash_keys(yml,'.')}, languages, join_hash_keys(language_yamls[default_language],'.'), default_language)
+
+      filename = File.join(outputfile_path,'csv',"#{project_name}.csv")
+      FileUtils.mkpath(File.dirname(filename))
+      File.open(filename, "w") {|f| f.write(csv_data.inject([]) { |csv, row|  csv << CSV.generate_line(row) }.join(""))}
+    end
+
+    def yaml_for_platform_and_lang(source_path, project_name, platform, language)
+      if platform == :all
+        load_yaml(File.join(source_path,"#{project_name}.#{language}.yml")).to_h
+      else
+        load_yaml(File.join(source_path,"#{project_name}.#{language}.#{platform.to_s}.yml")).to_h
       end
     end
 
-    def build_yml(file_prefix, outputfile_path)
-      get_languages(file_prefix).each do |lang|
-        yaml = load_merged_yaml_for_method([file_prefix, lang], :yml)
-        fileContent = yaml.to_yaml
-        save_with_filename(fileContent, lang, file_prefix, outputfile_path, :yml)
-      end
-    end
 
-    
     ## Hash Helper
- 
+
     # flatten the hash, ["a" => ["b" => "c"]] becomes [["a", "b"]=>"c"]
     def flat_hash(h,f=[],g={})
       return g.update({ f=>h }) unless h.is_a? Hash
@@ -209,5 +235,5 @@ module N42translation
       Hash[flat_hash(hash).map {|k, v| [k.join(joiner), v] }]
     end
 
-  end  
+  end
 end
