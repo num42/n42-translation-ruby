@@ -1,11 +1,3 @@
-build_path: "./"
+build_path: "./builds"
 source_path: "./"
 project_name: "horsch"
-languages: "en-US,de"
-targets:
-  all: "ios,android,rails,csv"
-  mobile: "ios,android"
-target_build_path_names:
-  android: "Android"
-  ios: "iOS"
-  rails: "Rails"

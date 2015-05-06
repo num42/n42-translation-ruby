@@ -1,7 +1,7 @@
-build_path: "./"
+build_path: "./builds"
 source_path: "./"
-project_name: "horsch"
-languages: "en-US,de"
+project_name: "default-project-name"
+languages: "en-US,de,en,ru,pl,cs,fr"
 targets:
   all: "ios,android,rails,csv"
   mobile: "ios,android"
