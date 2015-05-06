@@ -13,12 +13,13 @@ module N42translation
     desc "init <project-name> <target> <languages>", "init"
     def init(project_name = nil, target = nil, languages = nil)
       config = load_config_file(project_name)
+
       build_path = config["build_path"]
       source_path = config["source_path"]
 
-      project_name = config["project_name"]
-      project_name = project_name unless project_name.nil?
+      project_name = config["project_name"] if project_name.nil?
 
+      targets = []
       targets = [target] if target != nil && target != ""
       targets = config["targets"]["all"].split(',').map(&:lstrip).map(&:rstrip) if target === "all"
       targets = config["targets"]["mobile"].split(',').map(&:lstrip).map(&:rstrip) if target === "mobile"
@@ -83,38 +84,28 @@ module N42translation
       end
     end
 
-    desc "add <target> <project_name> <key> <value>", "Adds the value (e.g. 'my message') to the key (e.g. path.to.my_message) in the target (all, ios, android or rails) for the project_name (e.g. horsch)"
-    def add(target, project_name, key, value)
+    desc "add <target> <project_name> <key> <value> <language>", "Adds the value (e.g. 'hello world') to the key (e.g. path.to.my_message) in the target (all, ios, android, rails) for the project_name (e.g. horsch), optional: <language> (e.g. 'de', default: 'en') will add your value to the specified language"
+    def add(target, project_name, key, value, language = "en")
       config = load_config_file(project_name)
       source_path = config["source_path"]
 
       get_languages(project_name).each do |lang|
-        yaml = yaml_for_platform_and_lang(source_path, project_name, target.to_sym, lang)
 
-        if (target.eql? "all")
-          yaml = load_yaml([project_name, lang])
-        else
-          yaml = load_yaml([project_name, lang, target])
-        end
         # hash is a string here
-        hash = value
+        hash = value if lang === language
+        hash = "TODO: #{value}(#{language.upcase})" unless lang === language
+
         key.split(".").reverse.each do |keypart|
           # hash is a hash after calling this the first time
           hash = {keypart => hash}
         end
 
-        unless yaml
-          # Yaml returned false, so it was empty and we set it to hash
-          yaml = hash
-        else
-          yaml = yaml.deep_merge(hash)
-        end
-
-        puts yaml.inspect
-        fileContent = yaml.to_yaml
+        fileContent = yaml_for_platform_and_lang(source_path, project_name, target.to_sym, lang).deep_merge(hash).to_yaml
         save_with_target(fileContent, lang, project_name, target)
       end
     end
+
+    
 
     private
     ## Helper
@@ -150,22 +141,14 @@ module N42translation
       when :yml
         filename = "#{outputfile_path}/#{project_name}.#{lang}.yml"
       end
-      puts "saving to #{filename}"
 
       FileUtils.mkdir_p(File.dirname(filename))
-
       File.open(filename, 'w') { |file| file.write(content) }
     end
 
     def save_with_target(content, lang, project_name, target)
-      puts ("#{target}")
-      if target.eql? "all"
-        filename = "#{project_name}.#{lang}.yml"
-      else
-        filename = "#{project_name}.#{lang}.#{target}.yml"
-      end
-
-      puts "saving to #{filename}"
+      filename = "#{project_name}.#{lang}.yml"  if target.eql? "all"
+      filename = "#{project_name}.#{lang}.#{target}.yml" unless target.eql? "all"
 
       FileUtils.mkdir_p(File.dirname(filename))
       File.open(filename, 'w') { |file| file.write(content) }
