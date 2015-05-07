@@ -11,7 +11,7 @@ module N42translation
   class CLI < Thor
 
     desc "init <project-name> <target> <languages>", "init"
-    def init(project_name = nil, target = nil, languages = nil)
+    def init(project_name, target = nil, languages = nil)
       config = load_config_file(project_name)
 
       build_path = config["build_path"]
@@ -84,31 +84,50 @@ module N42translation
       end
     end
 
-    desc "add <target> <project_name> <key> <value> <language>", "Adds the value (e.g. 'hello world') to the key (e.g. path.to.my_message) in the target (all, ios, android, rails) for the project_name (e.g. horsch), optional: <language> (e.g. 'de', default: 'en') will add your value to the specified language"
+    desc "add <target> <project_name> <key> <value> <language>", "creates or updates the specified <value> for the <key> in the <target> in the project <project_name> for the specified <language>(default: 'en') will add a 'TODO: <value>(<language>)' to all other languages"
     def add(target, project_name, key, value, language = "en")
+      insert_string(target, project_name, key, value, language, :override)
+    end
+    #
+    # desc "update <target> <project_name> <key> <value> <language>", "updates or creates the specified <value> for the <key> in the <target> for the project <project_name>. Optional is language(default: 'en') will add to specific <language>"
+    # def update(target, project_name, key, new_value, language="en")
+    #   insert_string(target, project_name, key, new_value, language, :update)
+    # end
+    #
+    #
+
+    private
+    ## Helper
+
+    # inserts string into languages
+    def insert_string(target, project_name, key, value, language = "en", mode)
       config = load_config_file(project_name)
       source_path = config["source_path"]
 
       get_languages(project_name).each do |lang|
-
-        # hash is a string here
-        hash = value if lang === language
-        hash = "TODO: #{value}(#{language.upcase})" unless lang === language
-
-        key.split(".").reverse.each do |keypart|
-          # hash is a hash after calling this the first time
-          hash = {keypart => hash}
+        if lang === language
+          val = value
+          insert_string_into_language(key, value, lang, source_path, project_name, target)
+        else
+          next if mode === :update
+          val = "TODO: #{value}(#{language.upcase})"
+          insert_string_into_language(key, val, lang, source_path, project_name, target) if mode === :override
         end
-
-        fileContent = yaml_for_platform_and_lang(source_path, project_name, target.to_sym, lang).deep_merge(hash).to_yaml
-        save_with_target(fileContent, lang, project_name, target)
       end
     end
 
-    
+    def insert_string_into_language(key, value, language, source_path, project_name, target)
+      # hash is a string here
+      hash = value
 
-    private
-    ## Helper
+      key.split(".").reverse.each do |keypart|
+        # hash is a hash after calling this the first time
+        hash = {keypart => hash}
+      end
+
+      fileContent = yaml_for_platform_and_lang(source_path, project_name, target.to_sym, language).deep_merge(hash).to_yaml
+      save_with_target(fileContent, language, project_name, target)
+    end
 
     def load_config_file(project_name = "default")
       default_path = "./config.default.yml"
