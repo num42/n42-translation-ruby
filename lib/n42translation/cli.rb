@@ -4,6 +4,8 @@ require 'active_support'
 require 'n42translation/xml'
 require 'n42translation/strings'
 require 'n42translation/csv_convert'
+require 'n42translation/xlsx'
+require 'n42translation/config'
 require 'fileutils'
 require 'csv'
 
@@ -29,6 +31,10 @@ module N42translation
       raise Thor::Error, "no locale path found" if source_path.nil?
       raise Thor::Error, "no project name was specified" if project_name.nil?
       raise Thor::Error, "no targets specified" if targets.nil?
+
+      # write config File
+      puts config.to_yaml
+      File.open("config.#{project_name}.yml", 'w'){|file| file.write config.to_yaml} unless File.exists?("config.#{project_name}.yml")
 
       languages = config["languages"] if languages.nil?
       langs = languages.split(',').map(&:lstrip).map(&:rstrip)
@@ -64,6 +70,7 @@ module N42translation
         self.build(:ios, project_name, outputfile_path)
         self.build(:rails, project_name, outputfile_path)
         self.build(:csv, project_name, outputfile_path)
+        self.build(:xlsx, project_name, outputfile_path)
       when :android
         raise Thor::Error, "no build path specified for your target: #{target}" if target_build_path.nil?
         build_platform(source_path, project_name, target_build_path, target, :xml)
@@ -76,7 +83,9 @@ module N42translation
       when :csv
         raise Thor::Error, "no build path specified for your target: #{target}" if target_build_path.nil?
         build_csv(source_path, project_name, target_build_path, [:all, :ios, :android, :rails], default_language)
-        # build_platform(source_path, project_name, target_build_path, target, :csv)
+      when :xlsx
+        raise Thor::Error, "no build path specified for your target: #{target}" if target_build_path.nil?
+        build_xlsx(source_path, project_name, target_build_path, [:all, :ios, :android, :rails], default_language)
       when "".to_sym
         # ignore the “” case
       else
@@ -86,15 +95,16 @@ module N42translation
 
     desc "add <target> <project_name> <key> <value> <language>", "creates or updates the specified <value> for the <key> in the <target> in the project <project_name> for the specified <language>(default: 'en') will add a 'TODO: <value>(<language>)' to all other languages"
     def add(target, project_name, key, value, language = "en")
+      # puts "#{target}, #{project_name}, #{key}, #{value}, #{language}"
       insert_string(target, project_name, key, value, language, :override)
     end
-    #
-    # desc "update <target> <project_name> <key> <value> <language>", "updates or creates the specified <value> for the <key> in the <target> for the project <project_name>. Optional is language(default: 'en') will add to specific <language>"
-    # def update(target, project_name, key, new_value, language="en")
-    #   insert_string(target, project_name, key, new_value, language, :update)
-    # end
-    #
-    #
+
+    desc "update <target> <project_name> <key> <value> <language>", "updates or creates the specified <value> for the <key> in the <target> for the project <project_name>. Optional is language(default: 'en') will add to specific <language>"
+    def update(target, project_name, key, new_value, language="en")
+      insert_string(target, project_name, key, new_value, language, :update)
+    end
+
+
 
     private
     ## Helper
@@ -130,13 +140,12 @@ module N42translation
     end
 
     def load_config_file(project_name = "default")
-      default_path = "./config.default.yml"
+      default_yml = N42translation::Config.default_yml
       project_path = "./config.#{project_name}.yml"
-      default_yaml = load_yaml(default_path)
-      project_yaml = load_yaml(project_path)
+      project_yml = load_yaml(project_path)
 
-      return default_yaml if project_yaml.nil? || project_yaml == false
-      default_yaml.deep_merge(project_yaml)
+      return default_yml if ( project_yml.nil? || project_yml == false || project_yml.empty?)
+      default_yml.deep_merge(project_yml)
     end
 
     # returns the language part of filenames as array following <project_name>.<lang>.yml
@@ -177,7 +186,7 @@ module N42translation
       if File.exist?(file_path)
         YAML.load_file(file_path) || {}
       else
-        return {}
+        return YAML.load("---")
       end
     end
 
@@ -213,6 +222,22 @@ module N42translation
       FileUtils.mkpath(File.dirname(filename))
       File.open(filename, "w") {|f| f.write(csv_data.inject([]) { |csv, row|  csv << CSV.generate_line(row) }.join(""))}
     end
+
+    def build_xlsx(source_path, project_name, outputfile_path, platforms, default_language)
+      languages = get_languages(project_name)
+      language_yamls = {}
+      languages.each do |language|
+        language_yamls["#{language}"] = platforms.map {|platform| yaml_for_platform_and_lang(source_path, project_name, platform, language) }.reduce({}, :merge)
+      end
+
+      csv_data = N42translation::CSVConvert.createCSV(language_yamls.values.map{|yml| join_hash_keys(yml,'.')}, languages, join_hash_keys(language_yamls[default_language],'.'), default_language)
+
+      filename = File.join(outputfile_path,'xlsx',"#{project_name}.xlsx")
+      FileUtils.mkpath(File.dirname(filename))
+
+      N42translation::XLSX.create(csv_data, filename, project_name)
+    end
+
 
     def yaml_for_platform_and_lang(source_path, project_name, platform, language)
       if platform == :all

@@ -7,7 +7,7 @@ module N42translation
       keys = ymls.map{|yml| yml.keys }.flatten.uniq
 
       rows = []
-      rows << ["key",langs.join(',')].flatten
+      rows << ["key",langs].flatten
 
       keys.each do |key|
         rows << [key, get_values_from_key(ymls, key, default_yml, default_language)].flatten

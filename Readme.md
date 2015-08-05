@@ -19,3 +19,13 @@ Creates locale files for iOS, Android and Rails from common source files.
 * bundle exec n42translation add all horsch "path.to.my_message" "my new message": adds the key path.to.my_message with value "my new message" to the horsch.<lang>.yml files
 * bundle exec n42translation add all ios "path.to.my_message" "my new message": adds the key path.to.my_message with value "my new message" to the horsch.<lang>.ios.yml files
 
+
+### HOW TO INITILAIZE A PROJECT
+
+* you first have to run the initilizer script:
+bundle exec n42translation init <project_name> <target> <languages>
+
+* so lets say if you wanted to initialize a project with name stack:
+bundle exec n42translation init stacks all "en,de"
+
+* this creates a config file, and the necessary target-yaml files for the languages en and de
