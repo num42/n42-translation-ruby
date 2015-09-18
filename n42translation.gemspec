@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "thor"
   s.add_runtime_dependency "builder"
   s.add_runtime_dependency "activesupport"
+  s.add_runtime_dependency "write_xlsx"
 
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files`.split("\n").map{|f| f =~ /^bin\/(.*)/ ? $1 : nil}.compact
