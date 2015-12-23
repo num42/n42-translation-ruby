@@ -1,15 +1,16 @@
 PATH
   remote: .
   specs:
-    n42translation (0.0.9)
+    n42translation (0.1.0)
       activesupport
       builder
       thor
+      write_xlsx
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.1)
+    activesupport (4.2.4)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
@@ -17,8 +18,8 @@ GEM
       tzinfo (~> 1.1)
     builder (3.2.2)
     i18n (0.7.0)
-    json (1.8.2)
-    minitest (5.5.1)
+    json (1.8.3)
+    minitest (5.8.1)
     rubyzip (1.1.7)
     thor (0.19.1)
     thread_safe (0.3.5)
@@ -36,4 +37,6 @@ PLATFORMS
 DEPENDENCIES
   bundler (>= 1.0.0)
   n42translation!
-  write_xlsx
+
+BUNDLED WITH
+   1.10.6
