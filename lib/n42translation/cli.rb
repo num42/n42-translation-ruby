@@ -211,12 +211,15 @@ module N42translation
 
     def build_csv(source_path, project_name, outputfile_path, platforms, default_language)
       languages = get_languages(project_name)
-      language_yamls = {}
-      languages.each do |language|
-        language_yamls["#{language}"] = platforms.map {|platform| yaml_for_platform_and_lang(source_path, project_name, platform, language) }.reduce({}, :merge)
-      end
 
-      csv_data = N42translation::CSVConvert.createCSV(language_yamls.values.map{|yml| join_hash_keys(yml,'.')}, languages, join_hash_keys(language_yamls[default_language],'.'), default_language)
+      language_hashes = languages.map do |language|
+        d = platforms.map do |platform|
+          join_hash_keys(yaml_for_platform_and_lang(source_path, project_name, platform, language), '.')
+        end.reduce({},:merge)
+        [language.to_sym, d]
+      end.to_h
+
+      csv_data = N42translation::CSVConvert.createCSV(language_hashes, languages, language_hashes[default_language.to_sym], default_language )
 
       filename = File.join(outputfile_path,'csv',"#{project_name}.csv")
       FileUtils.mkpath(File.dirname(filename))
@@ -225,12 +228,15 @@ module N42translation
 
     def build_xlsx(source_path, project_name, outputfile_path, platforms, default_language)
       languages = get_languages(project_name)
-      language_yamls = {}
-      languages.each do |language|
-        language_yamls["#{language}"] = platforms.map {|platform| yaml_for_platform_and_lang(source_path, project_name, platform, language) }.reduce({}, :merge)
-      end
 
-      csv_data = N42translation::CSVConvert.createCSV(language_yamls.values.map{|yml| join_hash_keys(yml,'.')}, languages, join_hash_keys(language_yamls[default_language],'.'), default_language)
+      language_hashes = languages.map do |language|
+        d = platforms.map do |platform|
+          join_hash_keys(yaml_for_platform_and_lang(source_path, project_name, platform, language), '.')
+        end.reduce({},:merge)
+        [language.to_sym, d]
+      end.to_h
+
+      csv_data = N42translation::CSVConvert.createCSV(language_hashes, languages, language_hashes[default_language.to_sym], default_language )
 
       filename = File.join(outputfile_path,'xlsx',"#{project_name}.xlsx")
       FileUtils.mkpath(File.dirname(filename))
