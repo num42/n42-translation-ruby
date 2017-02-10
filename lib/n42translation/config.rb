@@ -9,7 +9,7 @@ module N42translation
         project_name: n42translation_project
         languages: de,en
         targets:
-          all: ios,android,rails,csv,xlsx
+          all: ios,android,rails
           mobile: ios,android
         target_build_path_names:
           android: Android
